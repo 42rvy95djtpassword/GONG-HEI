@@ -387,7 +387,7 @@
         <div class="w-16 h-16 mx-auto rounded-2xl bg-crimson-800 border border-gold-glow flex items-center justify-center mb-5">
             <i class="fa-solid fa-bell text-2xl text-gold-glow"></i>
         </div>
-        <h2 class="text-2xl sm:text-4xl font-cinematic font-extrabold text-white tracking-wide uppercase">Dapatkan Akses Pertama</h2>
+        <h2 class="text-2xl sm:text-4xl font-cinematic font-extrabold text-white tracking-wide uppercase">BE THE FIRST TO KNOW</h2>
         <p class="text-sm sm:text-base text-gray-200 mt-3 max-w-md mx-auto">
             Daftarkan email kamu untuk menerima notifikasi langsung saat lagu & video klip resmi Imlek 2027 dirilis!
         </p>
@@ -514,23 +514,33 @@
                 </div>
 
                 <!-- Input Form to Leave a Wish -->
-                <div class="glass-gold-card rounded-3xl p-6 sm:p-8 border border-gold-DEFAULT/40 max-w-2xl mx-auto">
-                    <form onsubmit="submitWish(event)" class="space-y-4">
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div>
-                            <label class="text-xs font-semibold text-gold-light/90 block mb-1">Your Name / Initial</label>
-                            <input type="text" id="wishName" required placeholder="Example: Alex S." class="w-full px-4 py-3 rounded-xl bg-crimson-950/80 border border-gold-DEFAULT/40 text-white placeholder-gray-500 text-sm focus:outline-none focus:border-gold-glow">
-                        </div>
-                        <div>
-                            <label class="text-xs font-semibold text-gold-light/90 block mb-1">Your Wish for CNY 2027</label>
-                            <textarea id="wishText" rows="3" required placeholder="Tuliskan pesan atau doa terbaikmu di sini..." class="w-full px-4 py-3 rounded-xl bg-crimson-950/80 border border-gold-DEFAULT/40 text-white placeholder-gray-500 text-sm focus:outline-none focus:border-gold-glow"></textarea>
-                        </div>
-                        <button type="submit" class="w-full py-4 rounded-xl font-bold text-xs sm:text-sm tracking-wider uppercase bg-gradient-to-r from-gold-glow via-gold-DEFAULT to-gold-dark text-crimson-950 hover:shadow-[0_0_25px_rgba(255,215,0,0.6)] transition duration-300 flex items-center justify-center space-x-2">
-                            <i class="fa-solid fa-paper-plane"></i>
-                            <span>Fly Your Dream and Wishes Lanterns in Our Red Sky</span>
-                        </button>
-                    </form>
-                </div>
+                <!-- Input Form to Leave a Wish -->
+<div class="glass-gold-card rounded-3xl p-6 sm:p-8 border border-gold-DEFAULT/40 max-w-2xl mx-auto">
+    <form onsubmit="submitWish(event)" class="space-y-4">
+        <div>
+            <label class="text-xs font-semibold text-gold-light/90 block mb-1">Your Name / Initial</label>
+            <input type="text" id="wishName" required placeholder="Example: Alex S." class="w-full px-4 py-3 rounded-xl bg-crimson-950/80 border border-gold-DEFAULT/40 text-white placeholder-gray-500 text-sm focus:outline-none focus:border-gold-glow">
+        </div>
+        <div>
+            <div class="flex justify-between items-center mb-1">
+                <label class="text-xs font-semibold text-gold-light/90 block">Your Wish for CNY 2027</label>
+                <span id="charCount" class="text-[10px] text-gray-400 font-mono">0 / 75</span>
+            </div>
+            <textarea 
+                id="wishText" 
+                rows="3" 
+                required 
+                maxlength="75" 
+                oninput="updateCharCount(this)"
+                placeholder="Tuliskan pesan atau doa terbaikmu di sini..." 
+                class="w-full px-4 py-3 rounded-xl bg-crimson-950/80 border border-gold-DEFAULT/40 text-white placeholder-gray-500 text-sm focus:outline-none focus:border-gold-glow resize-none"></textarea>
+        </div>
+        <button type="submit" class="w-full py-4 rounded-xl font-bold text-xs sm:text-sm tracking-wider uppercase bg-gradient-to-r from-gold-glow via-gold-DEFAULT to-gold-dark text-crimson-950 hover:shadow-[0_0_25px_rgba(255,215,0,0.6)] transition duration-300 flex items-center justify-center space-x-2">
+            <i class="fa-solid fa-paper-plane"></i>
+            <span>Fly Your Dream and Wishes Lanterns in Our Red Sky</span>
+        </button>
+    </form>
+</div>
             </section>
         </div>
 
@@ -847,72 +857,74 @@
             }
         }
 
-        /* ----------------------------------------------------
-           6. Interactive Wish Wall & Floating Sky Lanterns Canvas
+/* ----------------------------------------------------
+            6. Interactive Wish Wall & Floating Sky Lanterns Canvas
         ---------------------------------------------------- */
         const lCanvas = document.getElementById('lanternCanvas');
         const lCtx = lCanvas.getContext('2d');
         let lanterns = [];
 
         const initialWishes = [
-            { name: "Mei Ling", wish: "GONG HEI 2027! Semoga lagunya booming!" },
-            { name: "Kevin T.", wish: "Tebakan judul: Fire Goat Anthem!" },
-            { name: "Siti & Hans", wish: "Huuype banget nunggu C-Pop Imlek ini!" }
+            { name: "Mei Ling", wish: "Lagu imlek tapi Gen Z, ga kebayang sih cuman pasti keren bgt. SMGT yaa" },
+            { name: "KVN", wish: "Semoga tahun 2027, aku dpt banyak angpao wkwk" },
+            { name: "Junius", wish: "Huu gasabar sih nunggu lagunya rilis" }
         ];
 
-  let lanternSized = false;
-    function resizeLanternCanvas() {
-    if (!lCanvas) return;
-    const w = lCanvas.parentElement.clientWidth;
-    const h = lCanvas.parentElement.clientHeight;
-    if (!w || !h) return; // tab masih hidden, lewati
+        let lanternSized = false;
+        function resizeLanternCanvas() {
+            if (!lCanvas) return;
+            const w = lCanvas.parentElement.clientWidth;
+            const h = lCanvas.parentElement.clientHeight;
+            if (!w || !h) return; // tab masih hidden, lewati
 
-    lCanvas.width = w;
-    lCanvas.height = h;
+            lCanvas.width = w;
+            lCanvas.height = h;
 
-    // pertama kali ukuran asli didapat: sebar ulang lentera sesuai ukuran canvas
-    if (!lanternSized) {
-        lanternSized = true;
-        lanterns.forEach(l => {
-            l.reset();
-            l.y = Math.random() * h;
-        });
-    }
-  }
-function wrapText(ctx, text, maxWidth, maxLines) {
-    if (maxWidth < 10) maxWidth = 10; // jaga-jaga kalau canvas belum punya ukuran
-    const words = text.split(/\s+/);
-    const lines = [];
-    let line = '';
-
-    for (const word of words) {
-        const test = line ? line + ' ' + word : word;
-        if (ctx.measureText(test).width <= maxWidth) {
-            line = test;
-        } else {
-            if (line) lines.push(line);
-            line = word;
-            // kata tunggal kepanjangan: potong per karakter (minimal 1 karakter per putaran)
-            while (line.length > 1 && ctx.measureText(line).width > maxWidth) {
-                let i = line.length - 1;
-                while (i > 1 && ctx.measureText(line.slice(0, i)).width > maxWidth) i--;
-                lines.push(line.slice(0, i));
-                line = line.slice(i);
+            // pertama kali ukuran asli didapat: sebar ulang lentera sesuai ukuran canvas
+            if (!lanternSized) {
+                lanternSized = true;
+                lanterns.forEach(l => {
+                    l.reset();
+                    l.y = Math.random() * h;
+                });
             }
         }
-    }
-    if (line) lines.push(line);
 
-    if (lines.length > maxLines) {
-        lines.length = maxLines;
-        let last = lines[maxLines - 1];
-        while (last.length > 1 && ctx.measureText(last + '...').width > maxWidth) {
-            last = last.slice(0, -1);
+        function wrapText(ctx, text, maxWidth, maxLines) {
+            if (maxWidth < 10) maxWidth = 10; // jaga-jaga kalau canvas belum punya ukuran
+            const words = text.split(/\s+/);
+            const lines = [];
+            let line = '';
+
+            for (const word of words) {
+                const test = line ? line + ' ' + word : word;
+                if (ctx.measureText(test).width <= maxWidth) {
+                    line = test;
+                } else {
+                    if (line) lines.push(line);
+                    line = word;
+                    // kata tunggal kepanjangan: potong per karakter (minimal 1 karakter per putaran)
+                    while (line.length > 1 && ctx.measureText(line).width > maxWidth) {
+                        let i = line.length - 1;
+                        while (i > 1 && ctx.measureText(line.slice(0, i)).width > maxWidth) i--;
+                        lines.push(line.slice(0, i));
+                        line = line.slice(i);
+                    }
+                }
+            }
+            if (line) lines.push(line);
+
+            if (lines.length > maxLines) {
+                lines.length = maxLines;
+                let last = lines[maxLines - 1];
+                while (last.length > 1 && ctx.measureText(last + '...').width > maxWidth) {
+                    last = last.slice(0, -1);
+                }
+                lines[maxLines - 1] = last + '...';
+            }
+            return lines;
         }
-        lines[maxLines - 1] = last + '...';
-    }
-    return lines;
-    }
+
         class SkyLantern {
             constructor(name, wishText) {
                 this.name = name;
@@ -921,14 +933,14 @@ function wrapText(ctx, text, maxWidth, maxLines) {
                 this.y = Math.random() * lCanvas.height;
             }
 
-	   reset() {
-    this.x = Math.random() * (lCanvas.width - 120) + 20;
-    this.y = lCanvas.height + 80;
-    this.speedY = Math.random() * 0.6 + 0.4;
-    this.wobble = Math.random() * Math.PI;
-    this.scale = Math.random() * 0.3 + 0.85;
-    // lentera di sisi kanan canvas -> kotak digambar di kiri
-    this.flip = this.x > lCanvas.width / 2;
+            reset() {
+                this.x = Math.random() * (lCanvas.width - 120) + 20;
+                this.y = lCanvas.height + 80;
+                this.speedY = Math.random() * 0.6 + 0.4;
+                this.wobble = Math.random() * Math.PI;
+                this.scale = Math.random() * 0.3 + 0.85;
+                // lentera di sisi kanan canvas -> kotak digambar di kiri
+                this.flip = this.x > lCanvas.width / 2;
             }
 
             update() {
@@ -939,77 +951,119 @@ function wrapText(ctx, text, maxWidth, maxLines) {
             }
 
             draw() {
-    lCtx.save();
-    lCtx.translate(this.x, this.y);
-    lCtx.scale(this.scale, this.scale);
+                lCtx.save();
+                lCtx.translate(this.x, this.y);
+                lCtx.scale(this.scale, this.scale);
 
-    // ===== Badan lentera (tidak berubah) =====
-    const grad = lCtx.createLinearGradient(0, -30, 0, 30);
-    grad.addColorStop(0, '#ffd000');
-    grad.addColorStop(0.3, '#b80c29');
-    grad.addColorStop(1, '#4a000e');
+                // ===== Badan lentera =====
+                const grad = lCtx.createLinearGradient(0, -30, 0, 30);
+                grad.addColorStop(0, '#ffd000');
+                grad.addColorStop(0.3, '#b80c29');
+                grad.addColorStop(1, '#4a000e');
 
-    lCtx.beginPath();
-    lCtx.moveTo(-20, -25);
-    lCtx.quadraticCurveTo(0, -35, 20, -25);
-    lCtx.lineTo(16, 25);
-    lCtx.quadraticCurveTo(0, 30, -16, 25);
-    lCtx.closePath();
-    lCtx.fillStyle = grad;
-    lCtx.shadowColor = '#fbe3a1';
-    lCtx.shadowBlur = 18;
-    lCtx.fill();
-    lCtx.strokeStyle = '#d4af37';
-    lCtx.lineWidth = 1.5;
-    lCtx.stroke();
+                lCtx.beginPath();
+                lCtx.moveTo(-20, -25);
+                lCtx.quadraticCurveTo(0, -35, 20, -25);
+                lCtx.lineTo(16, 25);
+                lCtx.quadraticCurveTo(0, 30, -16, 25);
+                lCtx.closePath();
+                lCtx.fillStyle = grad;
+                lCtx.shadowColor = '#fbe3a1';
+                lCtx.shadowBlur = 18;
+                lCtx.fill();
+                lCtx.strokeStyle = '#d4af37';
+                lCtx.lineWidth = 1.5;
+                lCtx.stroke();
 
-    // Api
-    lCtx.beginPath();
-    lCtx.arc(0, 15, 6, 0, Math.PI * 2);
-    lCtx.fillStyle = '#ffffff';
-    lCtx.fill();
+                // Api
+                lCtx.beginPath();
+                lCtx.arc(0, 15, 6, 0, Math.PI * 2);
+                lCtx.fillStyle = '#ffffff';
+                lCtx.fill();
 
-    // ===== Kotak wish (ukuran menyesuaikan teks) =====
-    lCtx.shadowBlur = 0;
-    const padding = 8;
-    const cardW = Math.max(110, Math.min(150, lCanvas.width * 0.4));
-    const lineH = 12;
+                // ===== Kotak wish (ukuran menyesuaikan teks) =====
+                lCtx.shadowBlur = 0;
+                const padding = 8;
+                const cardW = Math.max(110, Math.min(150, lCanvas.width * 0.4));
+                const lineH = 12;
 
-    lCtx.font = '9px Inter';
-    const lines = wrapText(lCtx, this.wishText, cardW - padding * 2, 3);
-    const cardH = padding * 2 + 14 + lines.length * lineH;
-    const cardX = this.flip ? -25 - cardW : 25;
-    const cardY = -20;
+                lCtx.font = '9px Inter';
+                const lines = wrapText(lCtx, this.wishText, cardW - padding * 2, 3);
+                const cardH = padding * 2 + 14 + lines.length * lineH;
+                const cardX = this.flip ? -25 - cardW : 25;
+                const cardY = -20;
 
-    lCtx.beginPath(); // penting: supaya tidak menempel ke path api
-    lCtx.roundRect(cardX, cardY, cardW, cardH, 8);
-    lCtx.fillStyle = 'rgba(74, 0, 14, 0.85)';
-    lCtx.fill();
-    lCtx.strokeStyle = 'rgba(212, 175, 55, 0.6)';
-    lCtx.lineWidth = 1;
-    lCtx.stroke();
+                lCtx.beginPath();
+                lCtx.roundRect(cardX, cardY, cardW, cardH, 8);
+                lCtx.fillStyle = 'rgba(74, 0, 14, 0.85)';
+                lCtx.fill();
+                lCtx.strokeStyle = 'rgba(212, 175, 55, 0.6)';
+                lCtx.lineWidth = 1;
+                lCtx.stroke();
 
-    // Nama (juga dipotong kalau kepanjangan)
-    lCtx.textAlign = 'left';
-    lCtx.font = 'bold 10px Inter';
-    lCtx.fillStyle = '#fbe3a1';
-    const nameLine = wrapText(lCtx, this.name, cardW - padding * 2, 1)[0];
-    lCtx.fillText(nameLine, cardX + padding, cardY + padding + 6);
+                // Nama
+                lCtx.textAlign = 'left';
+                lCtx.font = 'bold 10px Inter';
+                lCtx.fillStyle = '#fbe3a1';
+                const nameLine = wrapText(lCtx, this.name, cardW - padding * 2, 1)[0];
+                lCtx.fillText(nameLine, cardX + padding, cardY + padding + 6);
 
-    // Isi wish
-    lCtx.font = '9px Inter';
-    lCtx.fillStyle = '#ffffff';
-    lines.forEach((ln, i) => {
-        lCtx.fillText(ln, cardX + padding, cardY + padding + 20 + i * lineH);
-    });
+                // Isi wish
+                lCtx.font = '9px Inter';
+                lCtx.fillStyle = '#ffffff';
+                lines.forEach((ln, i) => {
+                    lCtx.fillText(ln, cardX + padding, cardY + padding + 20 + i * lineH);
+                });
 
-    lCtx.restore();
-    }
-  }
+                lCtx.restore();
+            }
+        }
+
+        // Fungsi helper untuk mengambil data wish dari LocalStorage
+        function getSavedWishes() {
+            const saved = localStorage.getItem('userLanternWishes');
+            return saved ? JSON.parse(saved) : [];
+        }
+
+        // Fungsi helper untuk menyimpan data wish ke LocalStorage
+        function saveWishToStorage(name, wish) {
+            const currentWishes = getSavedWishes();
+            currentWishes.push({ name, wish });
+            localStorage.setItem('userLanternWishes', JSON.stringify(currentWishes));
+        }
+
+        // Fungsi untuk menghitung karakter real-time
+        function updateCharCount(textarea) {
+            const length = Array.from(textarea.value).length;
+            const charCountEl = document.getElementById('charCount');
+            
+            if (charCountEl) {
+                charCountEl.textContent = `${length} / 75`;
+                
+                if (length >= 70) {
+                    charCountEl.classList.remove('text-gray-400');
+                    charCountEl.classList.add('text-amber-400', 'font-bold');
+                } else {
+                    charCountEl.classList.remove('text-amber-400', 'font-bold');
+                    charCountEl.classList.add('text-gray-400');
+                }
+            }
+        }
+
         function initLanterns() {
             resizeLanternCanvas();
             lanterns = [];
-            initialWishes.forEach(w => {
+            
+            // 1. Muat wish bawaan/default awal
+            if (typeof initialWishes !== 'undefined') {
+                initialWishes.forEach(w => {
+                    lanterns.push(new SkyLantern(w.name, w.wish));
+                });
+            }
+
+            // 2. Muat wish yang pernah di-input user dari LocalStorage
+            const savedWishes = getSavedWishes();
+            savedWishes.forEach(w => {
                 lanterns.push(new SkyLantern(w.name, w.wish));
             });
         }
@@ -1037,11 +1091,20 @@ function wrapText(ctx, text, maxWidth, maxLines) {
 
             if (name && wish) {
                 lanterns.push(new SkyLantern(name, wish));
+                saveWishToStorage(name, wish);
+
                 confetti({ particleCount: 60, spread: 60, origin: { y: 0.7 }, colors: ['#fbe3a1', '#d4af37'] });
                 showToast("Harapanmu berhasil diterbangkan ke Wish Wall!");
+                
                 document.getElementById('wishName').value = '';
-                document.getElementById('wishTopic').value = '';
                 document.getElementById('wishText').value = '';
+                
+                const charCountEl = document.getElementById('charCount');
+                if (charCountEl) {
+                    charCountEl.textContent = '0 / 75';
+                    charCountEl.classList.remove('text-amber-400', 'font-bold');
+                    charCountEl.classList.add('text-gray-400');
+                }
             }
         }
         /* ----------------------------------------------------
